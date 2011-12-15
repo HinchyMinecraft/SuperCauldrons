@@ -1,0 +1,13 @@
+SuperCauldrons is an extremely simple plugin for Bukkit (an API for the Minecraft game server) created to solve two problems:
+
+-Unlimited water sources have to be created with what really just amounts to an abuse of the engine's water physics.
+-Cauldrons are basically useless, as they're just a development leftover from potion brewing before it was replaced with the Brewing Stand.
+
+SuperCauldrons solves both these problems by making Cauldrons infinite water sources. Just pour water into the cauldron, and you have an unlimited source of water for both buckets and bottles.
+
+Features:
+
+-Cauldrons are infinite water sources once filled with water.
+-You can fill multiple stacked empty bottles at once with water. As filled bottles don't stack, any excess bottles will be dropped on the ground.
+-Water flowing over the top of a cauldron will fill the cauldron.
+-Redstone power applied to a cauldron with water will eject the water out of the top. When unpowered, the water will go back into the cauldron.
