@@ -41,7 +41,7 @@ public class SuperCauldrons extends JavaPlugin {
 		
 		this.getConfig();
 
-		log.info("[SuperCauldrons] v1.2.0 by Zach Hinchy (http://hinchy.us/) enabled.");
+		log.info("[SuperCauldrons] Version 1.2.0 by Zach Hinchy (http://hinchy.us/) has been enabled.");
 		if (this.getConfig().isSet("supercauldrons") == false) {
 			this.saveDefaultConfig();
 			log.info("[SuperCauldrons] Config did not exist or was invalid, default config saved.");
@@ -50,7 +50,7 @@ public class SuperCauldrons extends JavaPlugin {
 	}
 	 
 	public void onDisable() { 
-		log.info("SuperCauldrons has been disabled.");
+		log.info("[SuperCauldrons] SuperCauldrons has been disabled.");
 	}	
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args){
