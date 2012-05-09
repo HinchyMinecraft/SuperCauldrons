@@ -16,25 +16,27 @@
 
 package us.hinchy.SuperCauldrons;
 
-import java.util.logging.Logger;
-
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockFromToEvent;
-import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockRedstoneEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
-@SuppressWarnings("deprecation")
-public class SuperCauldronsBlockListener extends BlockListener {
+public class SuperCauldronsListener implements Listener {
 	
-	Logger log = Logger.getLogger("Minecraft");
 	public SuperCauldrons plugin;
 	 
-	public SuperCauldronsBlockListener(SuperCauldrons instance) {
+	public SuperCauldronsListener(SuperCauldrons instance) {
 	    plugin = instance;
 	}
 	
+	@EventHandler
 	public void onBlockFromTo(BlockFromToEvent event) {
 		if (plugin.getConfig().getBoolean("supercauldrons.flow-fill") == true) {
 			if ((event.getBlock().getType() == Material.WATER) || (event.getBlock().getType() == Material.STATIONARY_WATER)) {
@@ -62,6 +64,7 @@ public class SuperCauldronsBlockListener extends BlockListener {
 		}
 	}
 	
+	@EventHandler
 	public void onBlockRedstoneChange(BlockRedstoneEvent event) {
 		if (plugin.getConfig().getBoolean("supercauldrons.redstone") == true) {
 			
@@ -145,6 +148,56 @@ public class SuperCauldronsBlockListener extends BlockListener {
 						}
 			}
 			
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPlayerInteract(PlayerInteractEvent event) {
+		
+		if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
+		if (event.getClickedBlock().getType() == Material.CAULDRON) {
+
+			int metadata = (int)event.getClickedBlock().getData();
+
+			if (event.getPlayer().getItemInHand().getType() == Material.WATER_BUCKET) {
+				event.getPlayer().setItemInHand(new ItemStack(Material.BUCKET,1));
+				event.getClickedBlock().setData((byte)3);
+			} else {
+				if (metadata != 0) {
+					if (event.getPlayer().getItemInHand().getType() == Material.BUCKET) {
+						if ((plugin.getConfig().getBoolean("supercauldrons.infinite") == true) || (metadata > 2)) {
+							event.getPlayer().setItemInHand(new ItemStack(Material.WATER_BUCKET,1));
+						}
+						if ((plugin.getConfig().getBoolean("supercauldrons.infinite") == false) && (metadata > 2)) {
+							event.getClickedBlock().setData((byte)0);
+							event.setCancelled(true);
+						}
+					} else if (event.getPlayer().getItemInHand().getType() == Material.GLASS_BOTTLE) {
+						event.setCancelled(true);
+						if (event.getPlayer().getInventory().firstEmpty() > -1) {
+							if (event.getPlayer().getItemInHand().getAmount() > 1) {
+								event.getPlayer().getItemInHand().setAmount(event.getPlayer().getItemInHand().getAmount() - 1);
+								event.getPlayer().getInventory().addItem(new ItemStack(Material.POTION,1,(byte)0));
+							} else event.getPlayer().setItemInHand(new ItemStack(Material.POTION,1,(byte)0));
+							if (plugin.getConfig().getBoolean("supercauldrons.infinite") == false) event.getClickedBlock().setData((byte)(metadata-1));
+						}
+					}
+					event.getPlayer().updateInventory();
+	
+					if (plugin.getConfig().getBoolean("supercauldrons.infinite") == true) {
+						event.getClickedBlock().setData((byte)3);
+					}
+				}
+			}
+
+			// Don't do stuff with cauldron metadata for bottle operations in non-infinite mode;
+			// the game handles those perfectly well on its own.
+			if (((event.getPlayer().getItemInHand().getType() != Material.POTION)
+			&& (event.getPlayer().getItemInHand().getType() != Material.GLASS_BOTTLE))
+			|| (plugin.getConfig().getBoolean("supercauldrons.infinite") == true)) {
+				new SuperCauldronUpdate(plugin,event.getPlayer(),event.getClickedBlock());
+			}			
 		}
 	}
 	

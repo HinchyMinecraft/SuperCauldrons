@@ -20,33 +20,23 @@ import java.util.logging.Logger;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.event.Event;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SuperCauldrons extends JavaPlugin {
 	
 	Logger log = Logger.getLogger("Minecraft");
-
-	private final SuperCauldronsPlayerListener scPlayerListener = new SuperCauldronsPlayerListener(this);
-	private final SuperCauldronsBlockListener scBlockListener = new SuperCauldronsBlockListener(this);
 	
-	@SuppressWarnings("deprecation")
-	public void onEnable() { 
-		PluginManager pm = this.getServer().getPluginManager();
-
-		pm.registerEvent(Event.Type.PLAYER_INTERACT, scPlayerListener, Event.Priority.Highest, this);
-		pm.registerEvent(Event.Type.BLOCK_FROMTO, scBlockListener, Event.Priority.Normal, this);
-		pm.registerEvent(Event.Type.REDSTONE_CHANGE, scBlockListener, Event.Priority.Normal, this);
+	public void onEnable() {	
+        getServer().getPluginManager().registerEvents(new SuperCauldronsListener(this), this);
 		
 		this.getConfig();
-
-		log.info("[SuperCauldrons] Version 1.2.0 by Zach Hinchy (http://hinchy.us/) has been enabled.");
+		
 		if (this.getConfig().isSet("supercauldrons") == false) {
 			this.saveDefaultConfig();
 			log.info("[SuperCauldrons] Config did not exist or was invalid, default config saved.");
 		}
-		
+
+		log.info("[SuperCauldrons] Version 1.2.2 by Zach Hinchy (http://hinchy.us/) has been enabled.");
 	}
 	 
 	public void onDisable() { 
