@@ -167,7 +167,13 @@ public class SuperCauldronsListener implements Listener {
 				if (metadata != 0) {
 					if (event.getPlayer().getItemInHand().getType() == Material.BUCKET) {
 						if ((plugin.getConfig().getBoolean("supercauldrons.infinite") == true) || (metadata > 2)) {
-							event.getPlayer().setItemInHand(new ItemStack(Material.WATER_BUCKET,1));
+							if (event.getPlayer().getInventory().firstEmpty() > -1) {
+								if (event.getPlayer().getItemInHand().getAmount() > 1) {
+									event.getPlayer().getItemInHand().setAmount(event.getPlayer().getItemInHand().getAmount() - 1);
+									event.getPlayer().getInventory().addItem(new ItemStack(Material.WATER_BUCKET,1,(byte)0));
+								} else event.getPlayer().setItemInHand(new ItemStack(Material.WATER_BUCKET,1,(byte)0));
+								if (plugin.getConfig().getBoolean("supercauldrons.infinite") == false) event.getClickedBlock().setData((byte)(metadata-1));
+							}
 						}
 						if ((plugin.getConfig().getBoolean("supercauldrons.infinite") == false) && (metadata > 2)) {
 							event.getClickedBlock().setData((byte)0);

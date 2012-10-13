@@ -1,7 +1,7 @@
 name: SuperCauldrons
 main: us.hinchy.SuperCauldrons.SuperCauldrons
-version: 1.2.2
-description: Adds useful features to Cauldrons.
+version: 1.2.3
+description: Adds useful features to the Cauldron block.
 author: Zach Hinchy
 website: http://dev.bukkit.org/server-mods/supercauldrons/
 commands:

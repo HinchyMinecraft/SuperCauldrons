@@ -36,7 +36,7 @@ public class SuperCauldrons extends JavaPlugin {
 			log.info("[SuperCauldrons] Config did not exist or was invalid, default config saved.");
 		}
 
-		log.info("[SuperCauldrons] Version 1.2.2 by Zach Hinchy (http://hinchy.us/) has been enabled.");
+		log.info("[SuperCauldrons] Version 1.2.3 by Zach Hinchy (http://hinchy.us/) has been enabled.");
 	}
 	 
 	public void onDisable() { 
