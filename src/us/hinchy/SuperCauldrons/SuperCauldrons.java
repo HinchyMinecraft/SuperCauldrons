@@ -16,6 +16,9 @@
 
 package us.hinchy.SuperCauldrons;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import org.bukkit.command.Command;
@@ -31,12 +34,26 @@ public class SuperCauldrons extends JavaPlugin {
 		
 		this.getConfig();
 		
-		if (this.getConfig().isSet("supercauldrons") == false) {
-			this.saveDefaultConfig();
-			log.info("[SuperCauldrons] Config did not exist or was invalid, default config saved.");
-		}
+		this.saveDefaultConfig();
+		processDefaultConfig();
 
-		log.info("[SuperCauldrons] Version 1.2.3 by Zach Hinchy (http://hinchy.us/) has been enabled.");
+		log.info("[SuperCauldrons] Version "+this.getDescription().getVersion()+" by Zach Hinchy (http://hinchy.us/) has been enabled.");
+	}
+
+	private void processDefaultConfig() {
+		final Map<String, Object> defParams = new HashMap<String, Object>();
+		this.getConfig().options().copyDefaults(true);
+
+		defParams.put("supercauldrons.infinite", true);
+		defParams.put("supercauldrons.flow-fill", true);
+		defParams.put("supercauldrons.redstone", true);
+
+		for (final Entry<String, Object> e : defParams.entrySet())
+			if (!this.getConfig().contains(e.getKey()))
+				this.getConfig().set(e.getKey(), e.getValue());
+
+		this.saveConfig();
+		this.reloadConfig();
 	}
 	 
 	public void onDisable() { 
